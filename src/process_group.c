@@ -24,6 +24,7 @@
 #include <limits.h>
 #include <sys/time.h>
 #include <signal.h>
+#include <errno.h>
 
 #include <assert.h>
 
@@ -61,7 +62,11 @@ int find_process_by_name(const char *process_name)
 	while (get_next_process(&it, &proc) != -1)
 	{
 		//process found
-		if (strncmp(basename(proc.command), process_name, strlen(process_name))==0 && kill(pid,SIGCONT)==0) {
+		if (strncmp(basename(proc.command), process_name, strlen(process_name))==0) {
+			if(kill(proc.pid,0) == -1 && errno == EPERM) {
+				//do not have permission
+				return -1;
+			}
 			//process is ok!
 			pid = proc.pid;
 			break;

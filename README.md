@@ -14,7 +14,7 @@ Get the latest source code
 
 The latest available code is here:
 
-https://github.com/opsengine/cpulimit
+https://github.com/52coder/cpulimit
 
 
 Install instructions

@@ -171,7 +171,8 @@ int get_next_process(struct process_iterator *it, struct process *p)
 	return 0;
 }
 
-int close_process_iterator(struct process_iterator *it) {
+int close_process_iterator(struct process_iterator *it) 
+{
 	if (it->dip != NULL && closedir(it->dip) == -1) {
 		perror("closedir");
 		return 1;

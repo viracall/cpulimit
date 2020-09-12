@@ -146,9 +146,6 @@ void update_process_group(struct process_group *pgroup)
 
 	while (get_next_process(&it, &tmp_process) != -1)
 	{
-//		struct timeval t;
-//		gettimeofday(&t, NULL);
-//		printf("T=%ld.%ld PID=%d PPID=%d START=%d CPUTIME=%d\n", t.tv_sec, t.tv_usec, tmp_process.pid, tmp_process.ppid, tmp_process.starttime, tmp_process.cputime);
 		int hashkey = pid_hashfn(tmp_process.pid);
 		if (pgroup->proctable[hashkey] == NULL)
 		{

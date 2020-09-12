@@ -26,7 +26,8 @@
 #include <stdio.h>
 #include <libproc.h>
 
-int unique_nonzero_ints(int* arr_in, int len_in, int* arr_out) {
+int unique_nonzero_ints(int* arr_in, int len_in, int* arr_out) 
+{
 	int* source = arr_in;
 	if (arr_out == NULL) return -1;
 	if (arr_in == arr_out) {
@@ -52,7 +53,8 @@ int unique_nonzero_ints(int* arr_in, int len_in, int* arr_out) {
 	return len_out-1;
 }
 
-int init_process_iterator(struct process_iterator *it, struct process_filter *filter) {
+int init_process_iterator(struct process_iterator *it, struct process_filter *filter) 
+{
 	it->i = 0;
 	/* Find out how much to allocate for it->pidlist */
 	if ((it->count = proc_listpids(PROC_ALL_PIDS, 0, NULL, 0)) <= 0) {
@@ -72,7 +74,8 @@ int init_process_iterator(struct process_iterator *it, struct process_filter *fi
 	return 0;
 }
 
-static int pti2proc(struct proc_taskallinfo *ti, struct process *process) {
+static int pti2proc(struct proc_taskallinfo *ti, struct process *process) 
+{
 	int bytes;
 	process->pid = ti->pbsd.pbi_pid;
 	process->ppid = ti->pbsd.pbi_ppid;
@@ -83,7 +86,8 @@ static int pti2proc(struct proc_taskallinfo *ti, struct process *process) {
 	return 0;
 }
 
-static int get_process_pti(pid_t pid, struct proc_taskallinfo *ti) {
+static int get_process_pti(pid_t pid, struct proc_taskallinfo *ti) 
+{
 	int bytes;
 	bytes = proc_pidinfo(pid, PROC_PIDTASKALLINFO, 0, ti, sizeof(*ti));
 	if (bytes <= 0) {
@@ -98,7 +102,8 @@ static int get_process_pti(pid_t pid, struct proc_taskallinfo *ti) {
 	return 0;
 }
 
-int get_next_process(struct process_iterator *it, struct process *p) {
+int get_next_process(struct process_iterator *it, struct process *p) 
+{
 	if (it->i == it->count) return -1;
 	if (it->filter->pid != 0 && !it->filter->include_children) {
 		struct proc_taskallinfo ti;
@@ -138,7 +143,8 @@ int get_next_process(struct process_iterator *it, struct process *p) {
 	return -1;
 }
 
-int close_process_iterator(struct process_iterator *it) {
+int close_process_iterator(struct process_iterator *it) 
+{
 	free(it->pidlist);
 	it->pidlist = NULL;
 	it->filter = NULL;

@@ -68,11 +68,11 @@
 
 //control time slot in microseconds
 //each slot is splitted in a working slice and a sleeping slice
-//TODO: make it adaptive, based on the actual system load
 #define TIME_SLOT 100000
 
 #define MAX_PRIORITY -10
 
+#define PID_MAX_FILE    "/proc/sys/kernel/pid_max"
 /* GLOBAL VARIABLES */
 
 //the "family"
@@ -97,8 +97,7 @@ static void quit(int sig)
 {
 	//let all the processes continue if stopped
 	struct list_node *node = NULL;
-	if (pgroup.proclist != NULL)
-	{
+	if (pgroup.proclist != NULL) {
 		for (node = pgroup.proclist->first; node != NULL; node = node->next) {
 			struct process *p = (struct process*)(node->data);
 			kill(p->pid, SIGCONT);
@@ -130,11 +129,12 @@ static void print_usage(FILE *stream, int exit_code)
 	fprintf(stream, "      -p, --pid=N            pid of the process (implies -z)\n");
 	fprintf(stream, "      -e, --exe=FILE         name of the executable program file or path name\n");
 	fprintf(stream, "      COMMAND [ARGS]         run this command and limit it (implies -z)\n");
-	fprintf(stream, "\nReport bugs to <marlonx80@hotmail.com>.\n");
+	fprintf(stream, "\nReport bugs to <https://github.com/52coder/cpulimit>.\n");
 	exit(exit_code);
 }
 
-static void increase_priority() {
+static void increase_priority() 
+{
 	//find the best available nice value
 	int old_priority = getpriority(PRIO_PROCESS, 0);
 	int priority = old_priority;
@@ -150,7 +150,8 @@ static void increase_priority() {
 }
 
 /* Get the number of CPUs */
-static int get_ncpu() {
+static int get_ncpu() 
+{
 	int ncpu;
 #ifdef _SC_NPROCESSORS_ONLN
 	ncpu = sysconf(_SC_NPROCESSORS_ONLN);
@@ -168,11 +169,12 @@ static int get_ncpu() {
 
 int get_pid_max()
 {
-#ifdef __linux__
-	//read /proc/sys/kernel/pid_max
+#if defined __linux__
 	static char buffer[1024];
-	FILE *fd = fopen("/proc/sys/kernel/pid_max", "r");
-	if (fd==NULL) return -1;
+	FILE *fd = fopen(PID_MAX_FILE, "r");
+	if (fd==NULL) {
+		return -1;
+	}
 	if (fgets(buffer, sizeof(buffer), fd)==NULL) {
 		fclose(fd);
 		return -1;
@@ -180,9 +182,9 @@ int get_pid_max()
 	fclose(fd);
 	return atoi(buffer);
 #elif defined __FreeBSD__
-	return 99998;
+	return 32768;
 #elif defined __APPLE__
-	return 99998;
+	return 32768;
 #endif
 }
 
@@ -314,7 +316,8 @@ void limit_process(pid_t pid, double limit, int include_children)
 	close_process_group(&pgroup);
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv) 
+{
 	//argument variables
 	const char *exe = NULL;
 	int perclimit = 0;

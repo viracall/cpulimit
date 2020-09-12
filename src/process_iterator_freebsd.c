@@ -24,7 +24,8 @@
 #include <fcntl.h>
 #include <paths.h>
 
-int init_process_iterator(struct process_iterator *it, struct process_filter *filter) {
+int init_process_iterator(struct process_iterator *it, struct process_filter *filter) 
+{
 	char errbuf[_POSIX2_LINE_MAX];
 	it->i = 0;
 	/* Open the kvm interface, get a descriptor */
@@ -67,7 +68,8 @@ static int get_single_process(kvm_t *kd, pid_t pid, struct process *process)
 	return 0;
 }
 
-int get_next_process(struct process_iterator *it, struct process *p) {
+int get_next_process(struct process_iterator *it, struct process *p) 
+{
 	if (it->i == it->count)
 	{
 		return -1;
@@ -109,7 +111,8 @@ int get_next_process(struct process_iterator *it, struct process *p) {
 	return -1;
 }
 
-int close_process_iterator(struct process_iterator *it) {
+int close_process_iterator(struct process_iterator *it) 
+{
 	if (kvm_close(it->kd) == -1) {
 		fprintf(stderr, "kvm_getprocs: %s\n", kvm_geterr(it->kd));
 		return -1;

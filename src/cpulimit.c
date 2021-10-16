@@ -129,7 +129,7 @@ static void print_usage(FILE *stream, int exit_code)
 	fprintf(stream, "      -p, --pid=N            pid of the process (implies -z)\n");
 	fprintf(stream, "      -e, --exe=FILE         name of the executable program file or path name\n");
 	fprintf(stream, "      COMMAND [ARGS]         run this command and limit it (implies -z)\n");
-	fprintf(stream, "\nReport bugs to <https://github.com/52coder/cpulimit>.\n");
+	fprintf(stream, "\nReport bugs to <https://github.com/viracall/cpulimit>.\n");
 	exit(exit_code);
 }
 
